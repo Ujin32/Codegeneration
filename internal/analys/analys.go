@@ -7,21 +7,46 @@ import (
 	"go/token"
 )
 
-func Analys(filepath string) error {
+type AnalysResult struct {
+	DeclCount    int
+	CallCount    int
+	AssignCount  int
+	ImportsCount int
+}
+
+func Analys(filepath string) (AnalysResult, error) {
 	fileSet := token.NewFileSet()
 	node, err := parser.ParseFile(fileSet, filepath, nil, parser.ParseComments)
 	if err != nil {
-		return fmt.Errorf("failed parse file with path %s: %w", filepath, err)
+		return AnalysResult{}, fmt.Errorf("failed parse file with path %s: %w", filepath, err)
 	}
 
+	result := AnalysResult{}
+
+	var declCount int
+	var assignCount int
+	var callCount int
+
 	ast.Inspect(node, func(n ast.Node) bool {
-		ret, ok := n.(*ast.ReturnStmt)
-		if ok {
-			fmt.Printf("return statement found on line %d:\n\t", fileSet.Position(ret.Pos()).Line)
-			return true
+		if _, ok := n.(*ast.CallExpr); ok {
+			callCount++
 		}
+
+		if _, ok := n.(*ast.DeclStmt); ok {
+			declCount++
+		}
+
+		if _, ok := n.(*ast.AssignStmt); ok {
+			assignCount++
+		}
+
 		return true
 	})
 
-	return nil
+	result.DeclCount = declCount
+	result.CallCount = callCount
+	result.AssignCount = assignCount
+	result.ImportsCount = len(node.Imports)
+
+	return result, nil
 }
