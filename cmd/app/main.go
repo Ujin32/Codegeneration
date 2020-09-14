@@ -1,43 +1,38 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"module07/internal/generator"
 	"module07/internal/monitors"
-	"os"
 )
 
 func Task03() {
-	data, err := ioutil.ReadFile("./assets/template/config_template.yml")
+	yamlConfiTemplate, err := ioutil.ReadFile("./assets/template/config_template.yml")
 	if err != nil {
 		panic(err)
 	}
 
-	f, err := os.Create("./assets/template/config.yml")
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
-
-	if err := generator.Generate(string(data), f); err != nil {
-		panic(err)
-	}
+	_ = generator.ConfigGenerate(string(yamlConfiTemplate), "./config.yml")
 }
 
 func Task04() {
-	monitorTemplate, err := ioutil.ReadFile("./assets/template/monitor_template.gotmpl")
+	marshallerTemplate, err := ioutil.ReadFile("./assets/template/marshaller.gotmpl")
 	if err != nil {
 		panic(err)
 	}
 
-	monitorTestTemplate, err := ioutil.ReadFile("./assets/template/monitor_test_template.gotmpl")
-	if err != nil {
-		panic(err)
-	}
+	_ = generator.MarshallerGenerator(
+		string(marshallerTemplate),
+		"Config",
+		"./internal/config/config.go",
+		"./internal/config/codegen_marshaller.go",
+	)
+}
 
-	if err := monitors.GenerateMonitor(string(monitorTemplate), string(monitorTestTemplate)); err != nil {
-		panic(err)
-	}
+// Заполнить логикой, когда дойдем до задания номер 5
+func Task05() {
+	_ = monitors.NewSimpleMonitor()
 }
 
 func main() {
@@ -45,4 +40,8 @@ func main() {
 	// Task03()
 	// Раскоментировать, когда дойдем до задания номер 4
 	// Task04()
+	// Раскоментировать, когда дойдем до задания номер 5
+	// Task05()
+
+	fmt.Println("Hello, from 07 module")
 }
