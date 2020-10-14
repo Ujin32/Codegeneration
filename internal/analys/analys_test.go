@@ -23,7 +23,7 @@ func TestAnalys(t *testing.T) {
 		},
 		"more info": {
 			file: "../../assets/astanalys/astanalys.go",
-			want: &AnalysResult{1, 3, 7, 4},
+			want: &AnalysResult{3, 3, 7, 4},
 		},
 	}
 
