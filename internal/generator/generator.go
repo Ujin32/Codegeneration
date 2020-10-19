@@ -5,7 +5,7 @@ const (
 	marshallStructFieldsKey = "marshallStructFields"
 )
 
-// Task05 - функция для генерации маршалера структуры в мапу
+// Task04 - функция для генерации маршалера структуры в мапу
 func MarshallerGenerator(marshallerTemplate string, structName string, inFilePath string, outFilePath string) error {
 	return nil
 }
