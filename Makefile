@@ -7,7 +7,7 @@ test_02:
 	@cd ./internal/analys && go test . -v
 
 bench_04:
-	@cd ./internal/config && go test -bench. -benchmem -benchtime=3s
+	@cd ./internal/config && go test -bench . -benchmem -benchtime=3s
 
 run:
 	@go run ./cmd/app/
