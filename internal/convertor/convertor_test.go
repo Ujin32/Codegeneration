@@ -42,22 +42,22 @@ func TestStructToMap(t *testing.T) {
 	t.Run("simple test", func(t *testing.T) {
 		res := StructToMap(simple)
 		req.NotNil(res)
-		req.Equal(res["name"], simple.Name)
-		req.Equal(res["id"], simple.ID)
+		req.Equal(simple.Name, res["name"])
+		req.Equal(simple.ID, res["id"])
 	})
 
 	t.Run("with struct field", func(t *testing.T) {
 		res := StructToMap(withStructFiled)
 		req.NotNil(res)
-		req.Equal(res["message"], withStructFiled.Message)
-		req.Equal(res["simple"], simple)
+		req.Equal(withStructFiled.Message, res["message"])
+		req.Equal(simple, res["simple"])
 	})
 
 	t.Run("more nesting", func(t *testing.T) {
 		res := StructToMap(withMoreNested)
 		req.NotNil(res)
-		req.Equal(res["message"], withMoreNested.Message)
-		req.Equal(res["struct_with_struct_field"], withStructFiled)
+		req.Equal(withMoreNested.Message, res["message"])
+		req.Equal(withStructFiled, res["struct_with_struct_field"])
 	})
 
 	t.Run("not struct", func(t *testing.T) {
