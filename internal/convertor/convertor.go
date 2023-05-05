@@ -5,16 +5,23 @@ import (
 )
 
 func MapToStruct(mp map[string]interface{}, item interface{}) error {
+	//Рефлексивное значение структуры
 	valueStruct := reflect.ValueOf(item)
+	//Значение структуры где есть доступ к изменению полей
 	elem := valueStruct.Elem()
+
 	for i := 0; i < elem.NumField(); i++ {
+		//Получение рефлексивной структуры поля для i поля
 		field := elem.Type().Field(i)
+		//получение тега от рефлексивной структуры поля
 		keyname := field.Tag.Get("keyname")
 		if keyname == "" {
 			keyname = field.Name
 		}
 		if val, ok := mp[keyname]; ok {
+			//Преобразование значения мапы в рефлексивное значение
 			fieldVal := reflect.ValueOf(val)
+			//установка преобразованного значения в поле структуры
 			elem.Field(i).Set(fieldVal)
 		}
 
@@ -37,12 +44,7 @@ func StructToMap(item interface{}) map[string]interface{} {
 			keyname = field.Name
 		}
 
-		if field.Type.Kind() == reflect.Struct {
-			convertMap[keyname] = valuesStruct.Field(i).Interface()
-
-		} else {
-			convertMap[keyname] = valuesStruct.Field(i).Interface()
-		}
+		convertMap[keyname] = valuesStruct.Field(i).Interface()
 
 	}
 	return convertMap
