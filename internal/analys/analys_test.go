@@ -1,6 +1,7 @@
 package analys
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -30,6 +31,7 @@ func TestAnalys(t *testing.T) {
 	for name, cs := range cases {
 		t.Run(name, func(t *testing.T) {
 			res, err := Analys(cs.file)
+			fmt.Println(cs.file)
 			req.NoError(err)
 			req.Equal(cs.want, res)
 		})
