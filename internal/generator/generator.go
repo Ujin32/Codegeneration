@@ -1,5 +1,10 @@
 package generator
 
+import (
+	"html/template"
+	"os"
+)
+
 const (
 	marshallStructKey       = "marshallStruct"
 	marshallStructFieldsKey = "marshallStructFields"
@@ -24,10 +29,42 @@ type Config struct {
 
 // Task03 - функция генерации конфига
 func ConfigGenerate(tmpl string, outFilePath string) error {
+	config := &Config{
+		Name:       "task_03",
+		Port:       "9090",
+		ReplicaSet: 13,
+		ImageName:  "dfd.png",
+		Tag:        "#df8",
+		EnvPath:    "module07/internal/generator",
+	}
+	err := generate(tmpl, outFilePath, config)
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
 // Основная функция которая должна производить генерацию
 func generate(tmpl string, outfilePath string, fields interface{}) error {
+	t, err := template.New("configTmpl").Parse(tmpl)
+	if err != nil {
+		return err
+	}
+
+	outFile, err := os.Create(outfilePath)
+
+	if err != nil {
+		return err
+	}
+
+	defer outFile.Close()
+
+	err = t.Execute(outFile, fields)
+	if err != nil {
+		return err
+	}
 	return nil
+
 }
