@@ -1,8 +1,13 @@
 package generator
 
 import (
+	"fmt"
+	"go/ast"
+	"go/parser"
+	"go/token"
 	"html/template"
 	"os"
+	"strings"
 )
 
 const (
@@ -12,6 +17,61 @@ const (
 
 // Task04 - функция для генерации маршалера структуры в мапу
 func MarshallerGenerator(marshallerTemplate string, structName string, inFilePath string, outFilePath string) error {
+
+	type Field struct {
+		Name  string
+		Value string
+	}
+
+	type templateData struct {
+		Package    string
+		StructName string
+		Fields     []Field
+	}
+
+	templData := &templateData{}
+	templField := &Field{}
+
+	fileSet := token.NewFileSet()
+
+	node, err := parser.ParseFile(fileSet, inFilePath, nil, parser.ParseComments)
+
+	templData.StructName = structName
+	templData.Package = node.Name.Name
+	for _, decl := range node.Decls {
+		if genDecl, ok := decl.(*ast.GenDecl); ok {
+			for _, spec := range genDecl.Specs {
+				if typeSpec, ok := spec.(*ast.TypeSpec); ok {
+					if strucT, ok := typeSpec.Type.(*ast.StructType); ok {
+						fieldsTemp := make([]Field, 0, len(strucT.Fields.List))
+						for _, field := range strucT.Fields.List {
+							var name string
+							nameValue := field.Names[0].Name
+							if field.Tag != nil {
+								name = strings.Split(field.Tag.Value, "\"")[1]
+							} else {
+								name = field.Names[0].Name
+							}
+							templField.Name = name
+							templField.Value = nameValue
+							fieldsTemp = append(fieldsTemp, *templField)
+							templData.Fields = fieldsTemp
+
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if err != nil {
+		return err
+	}
+
+	if err := generate(marshallerTemplate, outFilePath, templData); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -50,6 +110,7 @@ func ConfigGenerate(tmpl string, outFilePath string) error {
 func generate(tmpl string, outfilePath string, fields interface{}) error {
 	t, err := template.New("configTmpl").Parse(tmpl)
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 

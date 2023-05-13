@@ -12,12 +12,13 @@ func Task03() {
 	if err != nil {
 		panic(err)
 	}
-
+	fmt.Println(string(yamlConfiTemplate))
 	_ = generator.ConfigGenerate(string(yamlConfiTemplate), "./config.yml")
 }
 
 func Task04() {
-	marshallerTemplate, err := ioutil.ReadFile("./assets/template/marshaller.gotmpl")
+	marshallerTemplate, err := ioutil.ReadFile("D:\\golang\\rebrain_basic\\module07\\assets\\template\\marshaller.gotmpl")
+	//./assets/template/marshaller.gotmpl
 	if err != nil {
 		panic(err)
 	}
@@ -25,8 +26,8 @@ func Task04() {
 	_ = generator.MarshallerGenerator(
 		string(marshallerTemplate),
 		"Config",
-		"./internal/config/config.go",
-		"./internal/config/codegen_marshaller.go",
+		"D:\\golang\\rebrain_basic\\module07\\internal\\config\\config.go",
+		"D:\\golang\\rebrain_basic\\module07\\internal\\config\\codegen_marshaller.go",
 	)
 }
 
@@ -36,9 +37,9 @@ func Task05() {
 }
 
 func main() {
-	Task03()
-	// Раскоментировать, когда дойдем до задания номер 4
-	// Task04()
+	//Task03()
+	//Раскоментировать, когда дойдем до задания номер 4
+	Task04()
 	// Раскоментировать, когда дойдем до задания номер 5
 	// Task05()
 
