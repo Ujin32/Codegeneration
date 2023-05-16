@@ -11,3 +11,6 @@ bench_04:
 
 run:
 	@go run ./cmd/app/
+
+make generate: 
+	@ go generate ./...
