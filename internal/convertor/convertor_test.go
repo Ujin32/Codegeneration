@@ -50,6 +50,7 @@ func TestStructToMap(t *testing.T) {
 		res := StructToMap(withStructFiled)
 		req.NotNil(res)
 		req.Equal(withStructFiled.Message, res["message"])
+
 		req.Equal(simple, res["simple"])
 	})
 
@@ -57,7 +58,9 @@ func TestStructToMap(t *testing.T) {
 		res := StructToMap(withMoreNested)
 		req.NotNil(res)
 		req.Equal(withMoreNested.Message, res["message"])
+
 		req.Equal(withStructFiled, res["struct_with_struct_field"])
+
 	})
 
 	t.Run("not struct", func(t *testing.T) {
