@@ -1,1 +1,11 @@
-package {{.package}}
+package {{.Package}}
+
+
+func (config *{{.StructName}}) StructToMap() map[string]interface{} {
+	convertMap := make(map[string]interface{})
+    {{range .Fields}}
+	convertMap["{{.Name}}"] = config.{{.Value}}
+    {{end}}
+	return convertMap
+    
+}
