@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	wr "module07/internal/generated/wrappers"
 	"module07/internal/generator"
 	"module07/internal/monitors"
+	"os"
 )
 
 func Task03() {
@@ -33,15 +35,22 @@ func Task04() {
 
 // Заполнить логикой, когда дойдем до задания номер 5
 func Task05() {
-	_ = monitors.NewSimpleMonitor()
+	monitor := monitors.NewSimpleMonitor()
+
+	monitorWithLog := wr.NewMonitorWithLog(monitor, os.Stdout, os.Stderr)
+
+	monitorWithLog.Run()
+
+	monitorWithLog.Type()
+
 }
 
 func main() {
 	//Task03()
 	//Раскоментировать, когда дойдем до задания номер 4
-	Task04()
+	//Task04()
 	// Раскоментировать, когда дойдем до задания номер 5
-	// Task05()
+	Task05()
 
 	fmt.Println("Hello, from 07 module")
 }
